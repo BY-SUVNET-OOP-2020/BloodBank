@@ -2,7 +2,7 @@
 
 namespace BloodbankCore
 {
-    public class Patient
+    public class Donor
     {
         public int ID { get; set; }
         public string FirstName { get; set; }
