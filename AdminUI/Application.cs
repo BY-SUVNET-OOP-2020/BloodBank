@@ -25,9 +25,11 @@ namespace AdminUI
         private bool CheckLogin()
         {
             Console.Write("username: ");
-            Console.ReadLine();
+            string userName = Console.ReadLine();
             Console.Write("password: ");
-            Console.ReadLine();
+            string password = Console.ReadLine();
+
+            //UserAuthentication.ValidateLogin(userName, password);
 
             Console.WriteLine("\nLogin successfull!");
             Thread.Sleep(1000);
