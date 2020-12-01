@@ -14,7 +14,6 @@ namespace AdminUI
             //Detta är huvudloopen i programmet
             while (true)
             {
-                Console.Clear(); //Rensa skärmen innan menyn visas
                 ShowMenu();
             }
         }
@@ -38,6 +37,8 @@ namespace AdminUI
         //Nu har jag börjar lista funktionalitet i grova drag.
         private void ShowMenu()
         {
+            Console.Clear(); //Rensa skärmen innan menyn visas
+
             Console.WriteLine("Blood Donor System Version 1.0\n");
             Console.WriteLine("[1] Register donation");
             Console.WriteLine("[2] Register new donor");
@@ -54,32 +55,86 @@ namespace AdminUI
                 case 3:
                     Environment.Exit(0);
                     break;
-                default:
-                    Console.WriteLine("Please choose a number from the menu.");
-                    break;
             }
         }
 
         private void ShowRegisterNewDonorMenu()
         {
+            Console.Clear();
 
+            Console.WriteLine("Register new donor:\n");
+
+            Donor newDonor = new Donor();
+            newDonor.ID = ReadIntFromLine("ID number: ");
+            newDonor.FirstName = ReadStringFromLine("First name: ");
+            newDonor.LastName = ReadStringFromLine("Last name: ");
+            newDonor.Email = ReadStringFromLine("E-mail: ");
+            newDonor.BloodType = GetBloodType();
+
+            //TODO Lägg till donatorn till nån lista här!
+
+            Console.WriteLine("\nDonor added successfully!");
+            Thread.Sleep(1000);
         }
 
         private void ShowDonationMenu()
         {
-
+            Console.Clear();
         }
 
-        //Gör en metod som visar en prompt och tar in en int från 0-9 från användaren. 
-        //Tänker att det är en bra metod att återanvända
-        private int GetIntFromUser()
+        //Nu börjar det blir ganska många såna här metoder där jag mest hämtar in input på olika vis,
+        //Tänker att det snart är dags att lyfta ut dem till en egen klass
+
+        private int GetIntFromUser(string prompt = ":> ")
         {
-            Console.Write(":> ");
+            Console.Write(prompt);
             while (true)
             {
                 if (Int32.TryParse(Console.ReadKey(true).KeyChar.ToString(), out int value))
                 {
                     return value;
+                }
+            }
+        }
+
+        private int ReadIntFromLine(string prompt = "")
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                if (Int32.TryParse(Console.ReadLine(), out int value))
+                {
+                    return value;
+                }
+                else
+                {
+                    Console.WriteLine("You must enter a number.");
+                }
+            }
+        }
+
+        private string ReadStringFromLine(string prompt = "")
+        {
+            Console.Write(prompt);
+            return Console.ReadLine();
+        }
+
+        private BloodType GetBloodType()
+        {
+            Console.WriteLine("\nChoose blood type:\n");
+            int value = 1;
+            foreach (var item in Enum.GetNames(typeof(BloodType)))
+            {
+                Console.WriteLine($"{value}: {item}");
+                value++;
+            }
+
+            while (true)
+            {
+                int choice = GetIntFromUser();
+                if (choice <= Enum.GetValues(typeof(BloodType)).Length)
+                {
+                    return (BloodType) choice;
                 }
             }
         }
