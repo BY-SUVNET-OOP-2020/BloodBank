@@ -1,6 +1,6 @@
 namespace BloodbankCore
 {
-    interface ILogin
+    public interface ILogin
     {
         bool AuthenticateLogin(string userName, string password);
     }
