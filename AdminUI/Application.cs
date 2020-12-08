@@ -7,10 +7,12 @@ namespace AdminUI
     class Application
     {
         ILogin login;
+        DonorRepository donorRepository;
 
         public Application(ILogin login)
         {
             this.login = login;
+            donorRepository = new DonorRepository();
         }
 
         public void Run()
@@ -71,13 +73,13 @@ namespace AdminUI
             Console.WriteLine("Register new donor:\n");
 
             Donor newDonor = new Donor();
-            newDonor.ID = Input.ReadIntFromLine("ID number: ");
+            newDonor.Id = Input.ReadIntFromLine("ID number: ");
             newDonor.FirstName = Input.ReadStringFromLine("First name: ");
             newDonor.LastName = Input.ReadStringFromLine("Last name: ");
             newDonor.Email = Input.ReadStringFromLine("E-mail: ");
             newDonor.BloodType = Input.GetBloodType();
 
-            //TODO Lägg till donatorn till nån lista här!
+            donorRepository.AddDonor(newDonor);
 
             Console.WriteLine("\nDonor added successfully!");
             Thread.Sleep(1000);
@@ -85,8 +87,13 @@ namespace AdminUI
 
         private void ShowDonationMenu()
         {
-
             Console.Clear();
+            // Mata in personnummer
+            // Visa donatorinfo
+            // Svara på hälsoundersökning
+            // Skriv in ml blods som lämnats
+            // Bekräfta uppgifter
+            // Donation registrerad
         }
     }
 }
