@@ -11,7 +11,9 @@ namespace AdminUI
     {
         static void Main()
         {
-            Application app = new Application();
+            ILogin login = new LoginMock();
+            Application app = new Application(login);
+
             app.Run();
         }
     }

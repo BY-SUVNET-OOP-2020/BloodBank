@@ -6,22 +6,27 @@ namespace AdminUI
 {
     class Application
     {
+        ILogin login;
+
+        public Application(ILogin login)
+        {
+            this.login = login;
+        }
+
         public void Run()
         {
-            //Om inloggning misslyckas returnerar vi till main och programmet avslutas
             if (CheckLogin() == false) return;
 
-            //Detta är huvudloopen i programmet
             while (true)
             {
                 ShowMenu();
             }
         }
 
-        //Än så länge finns ingen logik här, utan alla lösenord och användarnamn är ok
-        //Denna metod och logik tänker jag att jag vill lyfta ut till en annan klass
-        //så småningom, då att kolla inloggning är ett eget ansvarsområde skilt från att
-        //rita ut menyer osv
+        //Ett interface, ILogin, har skapats, och en påhittad loginklass som använder 
+        //sig av det interfaces har introduerats via konstruktorn och program-klassen.
+        //Alla lösenord och logins är fortfarande ok, men grundsystemet är på plats,
+        //åtminstonde här.
         private bool CheckLogin()
         {
             Console.Write("username: ");
@@ -29,11 +34,12 @@ namespace AdminUI
             Console.Write("password: ");
             string password = Console.ReadLine();
 
-            //UserAuthentication.ValidateLogin(userName, password);
+            bool isLoggedIn = login.AuthenticateLogin(userName, password);
 
-            Console.WriteLine("\nLogin successfull!");
+            Console.WriteLine("\nLogin " + (isLoggedIn ? "successfull!" : "failed"));
+
             Thread.Sleep(1000);
-            return true;
+            return isLoggedIn;
         }
 
         //Nu har jag börjar lista funktionalitet i grova drag.
