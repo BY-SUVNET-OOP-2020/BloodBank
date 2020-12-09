@@ -10,5 +10,12 @@ namespace BloodbankCore
         public string Email { get; set; }
         public HealthSurvey HealthSurvey { get; set; }
         public BloodType BloodType { get; set; }
+
+        public Donor()
+        {
+            //Se till så att en health survey altid skapas när en
+            //ny donator skapas
+            HealthSurvey = new HealthSurvey();
+        }
     }
 }

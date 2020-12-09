@@ -8,11 +8,15 @@ namespace AdminUI
     {
         ILogin login;
         DonorRepository donorRepository;
+        BloodDonationRepository bloodDonationRepository;
 
         public Application(ILogin login)
         {
             this.login = login;
             donorRepository = new DonorRepository();
+            bloodDonationRepository = new BloodDonationRepository();
+
+            AddTestData();
         }
 
         public void Run()
@@ -64,6 +68,7 @@ namespace AdminUI
                     Environment.Exit(0);
                     break;
             }
+            Thread.Sleep(3000);
         }
 
         private void ShowRegisterNewDonorMenu()
@@ -82,18 +87,57 @@ namespace AdminUI
             donorRepository.AddDonor(newDonor);
 
             Console.WriteLine("\nDonor added successfully!");
-            Thread.Sleep(1000);
         }
 
         private void ShowDonationMenu()
         {
             Console.Clear();
             // Mata in personnummer
-            // Visa donatorinfo
-            // Svara på hälsoundersökning
-            // Skriv in ml blods som lämnats
-            // Bekräfta uppgifter
-            // Donation registrerad
+            int id = Input.ReadIntFromLine("ID number: ");
+            Donor donor = donorRepository.GetDonorById(id);
+            if (donor != null)
+            {
+                // Visa donatorinfo 
+                Console.WriteLine("Id: " + donor.Id);
+                Console.WriteLine($"Name: {donor.FirstName} {donor.LastName}");
+                Console.WriteLine("Blood type: " + donor.BloodType);
+
+                // Svara på hälsoundersökning
+                // if (donor.HealthSurvey == null)
+                // {
+                Console.WriteLine("Health Survey:");
+                Console.ReadKey(true);
+                // }
+
+                if (donor.HealthSurvey.IsValid)
+                {
+                    Console.WriteLine("\nPerform donation procedure before continuing.\n");
+                    Console.ReadLine();
+                    // Skriv in ml blods som lämnats
+                    BloodDonation newDonation = new BloodDonation(donor.Id);
+                    newDonation.AmountInMl = Input.ReadIntFromLine("Enter amount of blood in ml: ");
+                    // Bekräfta uppgifter
+                    // Donation registrerad
+                    bloodDonationRepository.AddBloodDonation(newDonation);
+                    Console.WriteLine("Donation added!");
+                }
+
+            }
+            else
+            {
+                Console.WriteLine("Donor not found!");
+            }
+        }
+
+        void AddTestData()
+        {
+            Donor newDonor = new Donor();
+            newDonor.Id = 1234;
+            newDonor.FirstName = "Anna";
+            newDonor.LastName = "Anka";
+            newDonor.Email = "anna@anka.com";
+            newDonor.BloodType = BloodType.On;
+            donorRepository.AddDonor(newDonor);
         }
     }
 }
